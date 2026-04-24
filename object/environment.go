@@ -2,6 +2,13 @@ package object
 
 type Environment struct {
 	store map[string]Object
+	outer *Environment
+}
+
+func NewEnclosedEnvironment(outer *Environment) *Environment {
+	env := NewEnvironment()
+	env.outer = outer
+	return env
 }
 
 func NewEnvironment() *Environment {
