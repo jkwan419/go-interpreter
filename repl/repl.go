@@ -5,8 +5,9 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/jkwan419/go-interpreter/evaluator"
+	"github.com/jkwan419/go-interpreter/eval"
 	"github.com/jkwan419/go-interpreter/lexer"
+	"github.com/jkwan419/go-interpreter/object"
 	"github.com/jkwan419/go-interpreter/parser"
 )
 
@@ -27,6 +28,8 @@ const PROMPT = "> "
 
 func Start(in io.Reader, out io.Writer) {
 	scanner := bufio.NewScanner(in)
+	env := object.NewEnvironment()
+
 	for {
 		fmt.Printf(PROMPT)
 		scanned := scanner.Scan()
@@ -44,7 +47,7 @@ func Start(in io.Reader, out io.Writer) {
 			continue
 		}
 
-		evaluated := evaluator.Eval(program)
+		evaluated := eval.Eval(program, env)
 		if evaluated != nil {
 			io.WriteString(out, evaluated.Inspect())
 			io.WriteString(out, "\n")
